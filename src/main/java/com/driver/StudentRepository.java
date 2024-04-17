@@ -19,40 +19,55 @@ public class StudentRepository {
 
     public void saveStudent(Student student){
         // your code goes here
+        studentMap.put(student.getName(), student);
     }
 
     public void saveTeacher(Teacher teacher){
         // your code goes here
+        teacherMap.put(teacher.getName(), teacher);
     }
 
     public void saveStudentTeacherPair(String student, String teacher){
         if(studentMap.containsKey(student) && teacherMap.containsKey(teacher)){
-            // your code goes here
+            List<String> students = teacherStudentMapping.getOrDefault(teacher, new ArrayList<>());
+            students.add(student);
+            teacherStudentMapping.put(teacher, students);
         }
     }
 
     public Student findStudent(String student){
         // your code goes here
+        if(studentMap.containsKey(student)){
+            return studentMap.get(student);
+        }else{
+            return null;
+        }
     }
 
     public Teacher findTeacher(String teacher){
         // your code goes here
+        if(teacherMap.containsKey(teacher)){
+            return teacherMap.get(teacher);
+        }else{
+            return null;
+        }
     }
 
-    public List<String> findStudentsFromTeacher(String teacher){
-        // your code goes here
-        // find student list corresponding to a teacher
+    public List<String> findStudentsFromTeacher(String teacherName){
+        return teacherStudentMapping.getOrDefault(teacherName, new ArrayList<>());
     }
 
     public List<String> findAllStudents(){
-        // your code goes here
+        return new ArrayList<>(studentMap.keySet());
     }
 
-    public void deleteTeacher(String teacher){
-        // your code goes here
+    public void deleteTeacher(String teacherName){
+        teacherMap.remove(teacherName);
+        teacherStudentMapping.remove(teacherName);
     }
 
     public void deleteAllTeachers(){
-        // your code goes here
+        teacherMap.clear();
+        teacherStudentMapping.clear();
     }
 }
